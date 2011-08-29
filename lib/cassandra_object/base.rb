@@ -80,7 +80,8 @@ module CassandraObject
     include Persistence
     include Indexes
     include Dirty
-
+    include ActiveModel::Dirty
+    
     include Validation
     include Associations
 
