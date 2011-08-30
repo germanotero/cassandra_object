@@ -59,7 +59,6 @@ module CassandraObject
       def write_attribute(name, value)
         if ma = self.class.model_attributes[name]
           @attributes[name.to_s] = ma.check_value!(value)
-          self.send "#{name}=", value
         else
           raise NoMethodError, "Unknown attribute #{name.inspect}"
         end
