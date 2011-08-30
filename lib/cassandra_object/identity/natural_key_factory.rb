@@ -30,12 +30,12 @@ module CassandraObject
       attr_reader :attributes, :separator
 
       def initialize(options)
-        @attributes = [*options[:attributes]]
+        @attributes = [options[:attributes]]
         @separator  = options[:separator] || "-"
       end
 
       def next_key(object)
-        NaturalKey.new(attributes.map { |a| object.send a.to_s }.join(separator))
+        NaturalKey.new(@attributes.map { |a| object.send a.to_s }.join(@separator))
       end
 
       def parse(paramized_key)
