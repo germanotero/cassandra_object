@@ -78,7 +78,7 @@ module CassandraObject
 
       def write(key, attributes, schema_version)
         returning(key) do |key|
-          connection.insert(column_family, key.to_s, encode_columns_hash(attributes, schema_version), :consistency => write_consistency_for_thrift.to_s)
+          connection.insert(column_family, key.to_s, encode_columns_hash(attributes, schema_version), :consistency => write_consistency_for_thrift)
         end
       end
 
