@@ -78,7 +78,7 @@ module CassandraObject
 
       def write(key, attributes, schema_version)
         returning(key) do |key|
-          connection.insert(column_family, key.to_s, encode_columns_hash(attributes, schema_version), :consistency => write_consistency_for_thrift)
+          connection.insert(column_family, key.to_s, encode_columns_hash(attributes, schema_version), :consistency => write_consistency_for_thrift.to_s)
         end
       end
 
@@ -170,7 +170,7 @@ module CassandraObject
       
       def _write
         changed_attributes = changed.inject({}) { |h, n| h[n] = read_attribute(n); h }
-        self.class.write(key, changed_attributes, schema_version)
+        self.class.write(@key, changed_attributes, schema_version)
       end
 
       def new_record?
@@ -179,12 +179,12 @@ module CassandraObject
 
       def destroy
         run_callbacks :destroy do 
-          self.class.remove(key)
+          self.class.remove(@key)
         end
       end
       
       def reload
-        self.class.get(self.key)
+        self.class.get(@key)
       end
       
     end
