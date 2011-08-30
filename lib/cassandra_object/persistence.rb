@@ -7,7 +7,7 @@ module CassandraObject
     end
 
     VALID_READ_CONSISTENCY_LEVELS = [:one, :quorum, :all]
-    VALID_WRITE_CONSISTENCY_LEVELS = VALID_READ_CONSISTENCY_LEVELS + [:zero]
+    VALID_WRITE_CONSISTENCY_LEVELS = VALID_READ_CONSISTENCY_LEVELS
 
     module ClassMethods
       def consistency_levels(levels)
@@ -130,7 +130,6 @@ module CassandraObject
 
       def consistency_for_thrift(consistency)
         {
-          :zero   => Cassandra::Consistency::ZERO,
           :one    => Cassandra::Consistency::ONE, 
           :quorum => Cassandra::Consistency::QUORUM,
           :all    => Cassandra::Consistency::ALL
@@ -170,7 +169,7 @@ module CassandraObject
       end
       
       def _write
-        changed_attributes = changed.inject({}) { |h, n| puts n; h[n] = read_attribute(n); h }
+        changed_attributes = changed.inject({}) { |h, n| h[n] = read_attribute(n); h }
         self.class.write(key, changed_attributes, schema_version)
       end
 
