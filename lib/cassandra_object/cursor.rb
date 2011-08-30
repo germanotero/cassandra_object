@@ -1,10 +1,10 @@
 module CassandraObject
   class Cursor
-    def initialize(target_class, column_family, key, super_column, options={})
+    def initialize(target_class, column_family, key, super_column = nil, options={})
       @target_class  = target_class
       @column_family = column_family
       @key           = key.to_s
-      @super_column  = super_column
+      @super_column  = super_column if super_column
       @options       = options
       @validators    = []
     end

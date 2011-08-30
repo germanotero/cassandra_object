@@ -45,11 +45,13 @@ module CassandraObject
       def initialize(attribute_name, model_class, options)
         @attribute_name = attribute_name
         @model_class    = model_class
-        @reversed       = options[:reversed]
+        @reversed = false 
+        @reversed       = options[:reversed] if options[:reversed] 
+        
       end
       
       def find(attribute_value, options = {})
-        cursor = CassandraObject::Cursor.new(@model_class, column_family, attribute_value.to_s, @attribute_name.to_s, :start_after=>options[:start_after], :reversed=>@reversed)
+        cursor = CassandraObject::Cursor.new(@model_class, column_family, attribute_value.to_s, @attribute_name, :start_after=>options[:start_after], :reversed=>@reversed)
         cursor.validator do |object|
           object.send(@attribute_name) == attribute_value
         end
@@ -57,7 +59,7 @@ module CassandraObject
       end
       
       def write(record)
-        @model_class.connection.insert(column_family, record.send(@attribute_name).to_s, {@attribute_name.to_s=>record.key.to_s})
+        @model_class.connection.insert(column_family, record.send(@attribute_name).to_s, {@attribute_name.to_s=>{record.key.to_s => new_key}})
       end
       
       def remove(record)
